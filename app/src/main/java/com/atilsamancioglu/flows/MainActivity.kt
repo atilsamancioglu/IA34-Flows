@@ -5,13 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -20,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.atilsamancioglu.flows.ui.theme.FlowsTheme
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +53,10 @@ fun FirstScreen(viewModel: MyViewModel) {
 fun SecondScreen(viewModel : MyViewModel) {
 
     val liveDataValue = viewModel.liveData.observeAsState()
+
     val stateFlowValue = viewModel.stateFlow.collectAsState()
+
+    val sharedFlowValue = viewModel.sharedFlow.collectAsState(initial = "")
 
     Surface(color = MaterialTheme.colors.background) {
       Box(modifier = Modifier.fillMaxSize()) {
@@ -74,7 +76,19 @@ fun SecondScreen(viewModel : MyViewModel) {
                     Text(text = "State Flow Button")
                 }
 
+                Spacer(modifier = Modifier.padding(10.dp))
+
+                Text(text = sharedFlowValue.value)
+                Button(onClick = {
+                    viewModel.changeSharedFlowValue()
+
+
+                }) {
+                    Text(text = "Shared Flow Button")
+                }
+
             }
       }
     }
 }
+

@@ -69,6 +69,7 @@ class MyViewModel : ViewModel() {
     private val _stateFlow = MutableStateFlow("KotlinStateFlow")
     val stateFlow = _stateFlow.asStateFlow()
 
+    //SharedFlow is highly configurable version of stateFlow.
     private val _sharedFlow = MutableSharedFlow<String>()
     val sharedFlow = _sharedFlow.asSharedFlow()
 
@@ -77,5 +78,10 @@ class MyViewModel : ViewModel() {
         _stateFlow.value = "State Flow"
     }
 
+    fun changeSharedFlowValue() {
+        viewModelScope.launch {
+            _sharedFlow.emit("Shared Flow")
+        }
+    }
 
 }
